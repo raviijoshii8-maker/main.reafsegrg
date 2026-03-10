@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UrbanCart · fresh & fast</title>
+  <!-- completely fresh styling – no resemblance to previous examples -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #faf8f4;  /* warm paper */
+      color: #2b2a28;
+      line-height: 1.5;
+    }
+    /* import modern rounded font */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap');
+
+    header {
+      background: linear-gradient(145deg, #0b2c2f 0%, #1b4b4a 100%);
+      padding: 3rem 2rem;
+      text-align: center;
+      border-bottom: 6px solid #fea82f;
+      clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+    }
+    header h1 {
+      color: #fecc7f;
+      font-size: 3.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
+      text-shadow: 0 4px 12px rgba(0,30,20,0.3);
+    }
+    header p {
+      color: #f2e1c0;
+      font-size: 1.3rem;
+      font-weight: 400;
+      max-width: 600px;
+      margin: 0.5rem auto 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto 3rem;
+      padding: 2rem 2.5rem;
+      background: #ffffff;
+      border-radius: 42px 42px 32px 32px;
+      box-shadow: 0 20px 40px -10px rgba(0,40,30,0.15);
+    }
+
+    h2 {
+      color: #1e4a4a;
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin: 2rem 0 1.2rem;
+      display: inline-block;
+      border-bottom: 5px solid #fea02f;
+      padding-bottom: 0.3rem;
+    }
+
+    .section {
+      margin: 3rem 0;
+    }
+
+    /* cards for lists (instead of plain ul) */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem;
+      margin: 1.8rem 0;
+    }
+    .feature-card {
+      background: #fefcf7;
+      border: 1px solid #e9dfd1;
+      border-radius: 24px;
+      padding: 1.2rem 1.4rem;
+      box-shadow: 0 6px 14px rgba(0,30,20,0.04);
+      transition: 0.2s ease;
+      font-weight: 450;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .feature-card:hover {
+      border-color: #fea82f;
+      background: #fffbf3;
+      transform: translateY(-3px);
+    }
+    .feature-card::before {
+      content: "🛒";
+      font-size: 1.4rem;
+      filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.1));
+    }
+    /* special icons for different sections – just for flair */
+    .catalog .feature-card::before { content: "🍎"; }
+    .whyus .feature-card::before { content: "✨"; }
+    .delivery .feature-card::before { content: "🚚"; }
+
+    .intro p {
+      font-size: 1.2rem;
+      background: #f0f6f3;
+      padding: 1.8rem 2rem;
+      border-radius: 32px;
+      color: #1b3b3b;
+      margin: 1.5rem 0;
+      border-left: 12px solid #fea82f;
+      line-height: 1.6;
+    }
+
+    .company, .contact {
+      background: #f2f0ea;
+      padding: 2rem 2.2rem;
+      border-radius: 32px;
+      border: 1px solid #dbd3c5;
+    }
+    .company p, .contact p {
+      margin: 0.8rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .contact p:first-of-type::before { content: "📞"; font-size: 1.3rem; }
+    .contact p:nth-of-type(2)::before { content: "📧"; font-size: 1.3rem; }
+    .contact p:nth-of-type(3)::before { content: "💬"; font-size: 1.3rem; }
+
+    a {
+      color: #d36b1f;
+      font-weight: 500;
+      text-decoration: underline 2px transparent;
+      transition: 0.2s;
+    }
+    a:hover {
+      text-decoration-color: #fea82f;
+    }
+
+    footer {
+      background: #0b2c2f;
+      color: #e3dacf;
+      text-align: center;
+      padding: 2.5rem 1rem;
+      margin-top: 3rem;
+      border-radius: 40px 40px 0 0;
+      font-size: 1rem;
+    }
+    .footer-info {
+      color: #aab9b1;
+      margin-top: 0.8rem;
+    }
+
+    /* cookie modal – modern floating glass */
+    #cookie-modal-box:not(.hidden) #cookie-modal .bg-white {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(16px);
+      border: 2px solid #fea82f;
+      box-shadow: 0 30px 50px -20px #1b4b4a;
+    }
+    #cookie-modal-box.hidden { display: none; }
+    #cookie-backdrop { opacity: 0; transition: 0.3s; }
+    #cookie-modal { opacity: 0; transform: scale(0.9); transition: 0.3s; }
+    #cookie-modal-box:not(.hidden) #cookie-backdrop { opacity: 1; }
+    #cookie-modal-box:not(.hidden) #cookie-modal { opacity: 1; transform: scale(1); }
+
+    /* custom bullet style for address etc */
+    ul.plain {
+      list-style: none;
+      padding: 0;
+    }
+    ul.plain li {
+      margin: 0.8rem 0;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="%23fea82f"><circle cx="12" cy="12" r="8"/></svg>') left center no-repeat;
+      padding-left: 28px;
+      background-size: 18px;
+    }
+  </style>
+</head>
+<body style="overflow: hidden;">
+  <!-- tailwind only for modal if needed, but we use custom -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- COOKIE MODAL (shopping style, but behaviour exactly as original + mouse move) -->
+  <div id="cookie-modal-box" class="">
+    <div id="cookie-backdrop" class="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm transition-opacity duration-300"></div>
+    <div id="cookie-modal" class="fixed inset-0 flex items-center justify-center p-4 z-50 transition-all duration-300">
+        <div class="bg-white/90 backdrop-blur-xl text-gray-800 rounded-3xl shadow-2xl max-w-md w-full p-8 relative border-2 border-amber-300">
+            <button id="cookie-close" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center hover:bg-amber-200">
+                <svg viewBox="0 0 15 15" class="text-amber-700" height="18" width="18">
+                    <path fill="currentColor" d="M11.78 4.03a.75.75 0 0 0-1.06-1.06L7.5 6.19 4.28 2.97a.75.75 0 1 0-1.06 1.06L6.44 7.5l-3.22 3.22a.75.75 0 1 0 1.06 1.06L7.5 8.56l3.22 3.22a.75.75 0 1 0 1.06-1.06L8.56 7.5l3.22-3.47Z"></path>
+                </svg>
+            </button>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-4xl">🍪🛍️</span>
+                <h2 class="text-2xl font-bold text-emerald-800">smart cookies</h2>
+            </div>
+            <p class="text-gray-700 mb-6 text-lg">
+                We use cookies to remember your basket and make checkout smoother.
+                <span class="font-semibold text-amber-600">“Accept”</span> to continue.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button id="cookie-accept" class="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white py-3 px-6 rounded-xl font-bold shadow-md">✔️ Accept</button>
+                <button id="cookie-decline" class="flex-1 bg-stone-200 hover:bg-stone-300 text-stone-700 py-3 px-6 rounded-xl font-bold">Decline</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+        const modalBox = document.getElementById("cookie-modal-box");
+        const modal = document.getElementById("cookie-modal");
+        const backdrop = document.getElementById("cookie-backdrop");
+        const accept = document.getElementById("cookie-accept");
+        const decline = document.getElementById("cookie-decline");
+        const closeBtn = document.getElementById("cookie-close");
+
+        function showModal() {
+            modalBox.classList.remove("hidden");
+            setTimeout(() => {
+                backdrop.classList.remove("opacity-0");
+                modal.classList.remove("opacity-0", "scale-90");
+            }, 10);
+        }
+
+        function hideModal(choice) {
+            localStorage.setItem("urbancart-consent", choice);
+            modal.classList.add("opacity-0", "scale-90");
+            backdrop.classList.add("opacity-0");
+            setTimeout(() => {
+                modalBox.classList.add("hidden");
+                document.body.style.overflow = "";   // allow scroll
+            }, 400);
+            document.removeEventListener("mousemove", mouseMoveHandler);
+        }
+
+        function mouseMoveHandler() {
+            hideModal("closed");
+        }
+
+        if (accept) accept.onclick = () => hideModal("accepted");
+        if (decline) decline.onclick = () => hideModal("declined");
+        if (closeBtn) closeBtn.onclick = () => hideModal("closed");
+        if (backdrop) backdrop.onclick = () => hideModal("closed");
+
+        if (!localStorage.getItem("urbancart-consent")) {
+            showModal();
+            document.addEventListener("mousemove", mouseMoveHandler, { once: true });
+        } else {
+            document.body.style.overflow = "";
+        }
+    })();
+  </script>
+
+  <header>
+    <h1>UrbanCart</h1>
+    <p>fresh · local · swift — Minsk & whole Belarus</p>
+  </header>
+
+  <div class="container">
+    <section class="intro section">
+      <h2>shop differently</h2>
+      <p>
+        From farm‑fresh produce to everyday essentials — we bring the market to your door.
+        Thousands of items, transparent prices, and delivery in under 2 hours.
+        Your first order? Free delivery + a seasonal fruit basket 🎁
+      </p>
+    </section>
+
+    <section class="catalog section">
+      <h2>aisles you’ll love</h2>
+      <div class="feature-grid">
+        <div class="feature-card">Organic fruits & vegetables</div>
+        <div class="feature-card">Dairy, eggs & plant alternatives</div>
+        <div class="feature-card">Fresh bread & local pastries</div>
+        <div class="feature-card">Meat, poultry & sustainable fish</div>
+        <div class="feature-card">Pantry: pasta, grains, sauces</div>
+        <div class="feature-card">Household & eco cleaners</div>
+        <div class="feature-card">Baby care & hypoallergenic</div>
+        <div class="feature-card">Belarusian farm specialties</div>
+      </div>
+    </section>
+
+    <section class="delivery section">
+      <h2>delivery & convenience</h2>
+      <div class="feature-grid">
+        <div class="feature-card">2‑hour delivery in Minsk</div>
+        <div class="feature-card">Next‑day to regional cities</div>
+        <div class="feature-card">Free pickup at 20+ points</div>
+        <div class="feature-card">Schedule your 1‑hour slot</div>
+      </div>
+    </section>
+
+    <section class="whyus section">
+      <h2>why we’re different</h2>
+      <div class="feature-grid">
+        <div class="feature-card">Freshness guaranteed — or money back</div>
+        <div class="feature-card">5% cashback on every order</div>
+        <div class="feature-card">Eco‑friendly packaging</div>
+        <div class="feature-card">Support 8:00–23:00, real humans</div>
+        <div class="feature-card">30+ local farmers & producers</div>
+        <div class="feature-card">Personalised weekly deals</div>
+      </div>
+    </section>
+
+    <section class="company section">
+      <h2>about UrbanCart</h2>
+      <ul class="plain">
+        <li><strong>LLC “UrbanCart”</strong> — since 2019, reinventing grocery shopping</li>
+        <li>📍 220035 Minsk, Timiryazeva 72, office 12</li>
+        <li>📋 UNP 193998877, account BY17ALFA30122556780040200000</li>
+        <li>🏦 Alfa‑Bank CJSC, BIC ALFABY2X</li>
+        <li>👔 Director: Darya O. Volodina</li>
+      </ul>
+    </section>
+
+    <section class="contact section">
+      <h2>say hello</h2>
+      <p>📞 +375 (29) 777-65-43</p>
+      <p>📧 <a href="mailto:hello@urbancart.by"><span class="__cf_email__" data-cfemail="b2dbdcd4ddf2c1d3d4d7c19cc7d6">hello@urbancart.by</span></a></p>
+      <p>💬 Telegram / Viber @UrbanCartBot</p>
+      <p style="margin-top: 1.5rem; font-weight: 500;">✨ we reply in minutes, not hours</p>
+    </section>
+  </div>
+
+  <footer>
+    <p>© 2019–2025 UrbanCart.by — fresh convenience</p>
+    <p class="footer-info">crafted with 🛒 by CartStudio</p>
+  </footer>
+
+  <!-- cf email decoder (same mechanism) -->
+  <script>
+    (function(){
+        function decodeEmail(encodedString) {
+            var email = "", r = parseInt(encodedString.substr(0, 2), 16), n, i;
+            for (n = 2; encodedString.length - n; n += 2){
+                i = parseInt(encodedString.substr(n, 2), 16) ^ r;
+                email += String.fromCharCode(i);
+            }
+            return email;
+        }
+        var elements = document.querySelectorAll('.__cf_email__');
+        for (var i = 0; i < elements.length; i++) {
+            var el = elements[i];
+            var encoded = el.getAttribute('data-cfemail');
+            if (encoded) {
+                var decodedEmail = decodeEmail(encoded);
+                el.innerHTML = decodedEmail;
+                if (el.parentNode.tagName === 'A') {
+                    el.parentNode.href = "mailto:" + decodedEmail;
+                }
+            }
+        }
+    })();
+  </script>
+
+  <!-- final overflow helper -->
+  <script>
+    (function() {
+        if (localStorage.getItem("urbancart-consent")) {
+            document.body.style.overflow = "";
+        } else {
+            document.body.style.overflow = "hidden";
+        }
+    })();
+  </script>
+</body>
+</html>
